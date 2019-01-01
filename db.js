@@ -7,7 +7,7 @@ const sequelize = new Sequelize(process.env.NAME, process.env.DATA, process.env.
 
 sequelize.authenticate().then(
     function(){
-        console.log('doc[It] test server on localhost is go')
+        console.log('guild-board-server on localhost is go')
     },
     function(err){
         console.log(err);

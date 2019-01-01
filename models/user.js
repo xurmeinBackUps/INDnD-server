@@ -1,21 +1,40 @@
-module.exports = function(sequelize, DataType){
-    return sequelize.define('user', {
+module.exports = (sequelize, DataType) => {
+    const User = sequelize.define('user', {
         username:{
             type: DataType.STRING,
             allowNull: false,
-            unique: true
+            unique: true,
+            primaryKey: true,  
         },
-        passwordhash:{
+        pin:{
+            type: DataType.INTEGER,
+            allowNull: false,
+            validate:{
+                min : 4,
+                max : 6
+            }
+        },
+        email:{
             type: DataType.STRING,
-            allowNull: false
-        },
-        confirmed_email:{
-           type: DataType.BOOLEAN,
-           //allowNull: true change to false after initial testing
-        },
-        // timezone:{
-        //     type: DataType.ENUM,
-        //      allowNull: true
-        // }
+            allowNull: false,
+            unique: true,
+            foreignKey: true,
+            validate:{
+                isEmail : true
+            }
+        }
     });
+    User.associate = characters => {
+        User.hasMany(characters, {
+            foreignKey : 'player',
+            sourceKey : 'username'
+        })
+    },
+    User.associate = contracts => {
+        User.hasMany(contracts, {
+            foreignKey : 'DM',
+            sourceKey : 'email'
+        })
+    }
+    return User
 };

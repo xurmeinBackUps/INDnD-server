@@ -1,6 +1,6 @@
 var router = require('express').Router();
 var sequelize = require('../db');
-var docIt = sequelize.import('../models/docit');
+var Contract = sequelize.import('../models/contract');
 
 router.post('/docitCreate', function (req, res){
  

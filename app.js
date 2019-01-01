@@ -5,8 +5,8 @@ var app = express();
 
 
 var user = require('./controllers/usercontroller');
-var docit = require('./controllers/docitcontroller');
-var category = require('./controllers/categorycontroller');
+var contract = require('./controllers/contractcontroller');
+var character = require('./controllers/charactercontroller');
 
 var sequelize = require('./db');
 
@@ -21,13 +21,13 @@ app.use('/database/server-test', function(req, res){
     res.send("Its alive!")
 })
 
-app.use('/visitor', user);
+app.use('/user', user);
 
 
 app.use(require('./middleware/validate-session'))
 
-app.use('/my/docit-index', docit);
-app.use('/my/categories', category);
+app.use('/contracts', contract);
+app.use('/player-characters', character);
 
 
 app.listen(process.env.PORT, () => {

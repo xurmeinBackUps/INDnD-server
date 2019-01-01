@@ -5,17 +5,18 @@ var User = sequelize.import('../models/user');
 var jwt = require('jsonwebtoken');
 var bcrypt = require('bcryptjs')
 
-router.post('/user/register', function(req, res){ 
-    var userName = req.body.user.username;
-    var password = req.body.user.passwordhash;
-    // var confirmed = req.body.user.confirmed_email;
+router.post('/new', function(req, res){ 
+    let Username = req.body.user.username;
+    let pinhash = req.body.user.pin;
+    let Email = req.body.user.email;
 
     User.create({
-        username: userName,
-        passwordhash: bcrypt.hashSync(password, 10),
+        username: Username,
+        pin: bcrypt.hashSync(pinhash, 10),
+        email: Email
     }).then(
         function createUserSuccess(user){
-            var token = jwt.sign({id: user.id}, process.env.SIGN, {expiresIn: 60*60*16});
+            let token = jwt.sign({id: user.id}, process.env.SIGN, {expiresIn: 60*60*16});
             res.json({
                username: user,
                message: 'Successfully registered!',
@@ -28,12 +29,13 @@ router.post('/user/register', function(req, res){
     );
 });
 
-router.post('/user/login', function(req, res){
-    User.findOne( { where: { username: req.body.user.username } } ).then(
-       
+router.post('/login', function(req, res){
+    User.findOne({
+        where: { username: req.body.user.username } 
+    }).then(
         function(user){
                 if(user){
-                bcrypt.compare(req.body.user.passwordhash, user.passwordhash, function(err, authMatch){
+                bcrypt.compare(req.body.user.pin, user.pin, function(err, authMatch){
                     if(authMatch){
                         var token = jwt.sign({id: user.id}, process.env.SIGN, {expiresIn: 60*60*16});
                         res.json({
