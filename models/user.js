@@ -1,27 +1,27 @@
 module.exports = (sequelize, DataType) => {
     const User = sequelize.define('user', {
+        email:{
+            type: DataType.STRING,
+            unique: true,
+            foreignKey: true,
+            validate:{
+                isEmail : true
+            }
+        },
         username:{
             type: DataType.STRING,
             allowNull: false,
             unique: true,
             primaryKey: true,  
         },
-        pin:{
-            type: DataType.INTEGER,
-            allowNull: false,
-            validate:{
-                min : 4,
-                max : 6
-            }
-        },
-        email:{
+        password:{
             type: DataType.STRING,
             allowNull: false,
-            unique: true,
             foreignKey: true,
             validate:{
-                isEmail : true
+                min : 8
             }
+        
         }
     });
     User.associate = characters => {
