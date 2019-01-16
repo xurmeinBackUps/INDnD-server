@@ -1,5 +1,11 @@
 module.exports = (sequelize, DataType) => {
     const User = sequelize.define('user', {
+        username:{
+            type: DataType.STRING,
+            allowNull: false,
+            unique: true,
+            foreignKey: true,  
+        },
         email:{
             type: DataType.STRING,
             unique: true,
@@ -8,33 +14,19 @@ module.exports = (sequelize, DataType) => {
                 isEmail : true
             }
         },
-        username:{
-            type: DataType.STRING,
-            allowNull: false,
-            unique: true,
-            primaryKey: true,  
-        },
         password:{
             type: DataType.STRING,
             allowNull: false,
-            foreignKey: true,
             validate:{
                 min : 8
             }
-        
         }
     });
-    User.associate = characters => {
-        User.hasMany(characters, {
-            foreignKey : 'player',
+    User.associate = models => {
+        User.hasMany(models.character, {
+            targetKey : 'player',
             sourceKey : 'username'
-        })
-    },
-    User.associate = contracts => {
-        User.hasMany(contracts, {
-            foreignKey : 'DM',
-            sourceKey : 'email'
-        })
+        });    
     }
     return User
 };

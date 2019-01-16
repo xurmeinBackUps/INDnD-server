@@ -19,7 +19,7 @@ router.post('/newpc', function(req, res){
         class: Class,
         subclass: Subclass
         }, 
-        {where: {PCName : pcName, player : activeUser}}
+        {where: {pcName : PCName, player : activeUser}}
     ).then(
         function createPC(){
             res.json({

@@ -1,12 +1,13 @@
 module.exports = function(sequelize, DataType){
     const Character = sequelize.define('character', {
         player:{
-            type: DataType.STRING,
-            allowNull: false,
-        },
+            type: DataType.STRING
+        },    
         pcName:{
             type: DataType.STRING,
-            allowNull: false
+            allowNull: false,
+            unique: true,
+            foreignKey: true
         },
         level:{
             type: DataType.INTEGER,
@@ -34,17 +35,16 @@ module.exports = function(sequelize, DataType){
             type: DataType.STRING
         }
     });
-    Character.associate = user => {
-        Character.belongsTo(user, {
-            foreignKey : 'player',
-            sourceKey : 'username'
-        })
-    },
-    Character.associate = contracts => {
-        Character.hasMany(contracts, {
-            foreignKey : 'pcName',
-            sourceKey : 'title'
-        })
+    Character.associate = models => {
+        Character.hasOne(models.user, {
+            as: 'player',
+            foreignKey : 'username'
+        }); 
+        Character.belongsToMany(models.contract, {
+            as: 'PC',
+            through: 'party_members',
+            foreignKey: 'title'
+        }); 
     }
     return Character
 };

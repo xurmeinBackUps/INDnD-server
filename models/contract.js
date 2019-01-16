@@ -1,15 +1,13 @@
 module.exports = function(sequelize, DataType){
     const Contract = sequelize.define('contract', {
         DM:{
-            type: DataType.STRING,
-            allowNull: false,
-            validate:{
-                isEmail : true
-            }
-        },
+            type: DataType.STRING
+        },    
         title:{
            type: DataType.STRING,
            allowNull: false,
+           unique: true,
+           foreignKey: true
         },
         description:{
             type: DataType.TEXT,
@@ -20,16 +18,15 @@ module.exports = function(sequelize, DataType){
             allowNull: false
         }
     });
-    Contract.associate = user => {
-        Contract.belongsTo(user, {
-            foreignKey : 'DM',
-            sourceKey : 'email'
-        })
-    },
-    Contract.associate = characters => {
-        Contract.hasMany(characters, {
-            foreignKey : 'pcName',
-            sourceKey : 'title'
+    Contract.associate = models => {
+        Contract.hasOne(models.user, {
+            as: 'DM',
+            foreignKey : 'email'
+        });
+        Contract.belongsToMany(models.character, {
+            as: 'contract',
+            through: 'party_members',
+            foreignKey: 'pcName'
         })
     }
     return Contract
